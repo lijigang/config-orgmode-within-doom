@@ -155,6 +155,54 @@ Change these key-value with your prefer.
 
 *UI Related Config*
 
+- [X] Hide tags
+#+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
+;; Hide tags
+(defun org-toggle-tag-visibility (state)
+  "Run in `org-cycle-hook'."
+  (message "%s" state)
+  (cond
+   ;; global cycling
+   ((memq state '(overview contents showall))
+    (org-map-entries
+     (lambda ()
+       (let ((tagstring (nth 5 (org-heading-components)))
+         start end)
+     (when tagstring
+       (save-excursion
+         (beginning-of-line)
+         (re-search-forward tagstring)
+         (setq start (match-beginning 0)
+           end (match-end 0)))
+       (cond
+        ((memq state '(overview contents))
+         (outline-flag-region start end t))
+        (t
+         (outline-flag-region start end nil))))))))
+   ;; local cycling
+   ((memq state '(folded children subtree))
+    (save-restriction
+      (org-narrow-to-subtree)
+      (org-map-entries
+       (lambda ()
+     (let ((tagstring (nth 5 (org-heading-components)))
+           start end)
+       (when tagstring
+         (save-excursion
+           (beginning-of-line)
+           (re-search-forward tagstring)
+           (setq start (match-beginning 0)
+             end (match-end 0)))
+         (cond
+          ((memq state '(folded children))
+           (outline-flag-region start end t))
+          (t
+           (outline-flag-region start end nil)))))))))))
+
+(add-hook 'org-cycle-hook 'org-toggle-tag-visibility)
+
+#+end_src
+
 - [X] Hide drawer
 #+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
 ;;;;;;;;;;;;;;;;;;;;;;;
