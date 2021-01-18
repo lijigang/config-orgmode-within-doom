@@ -545,11 +545,11 @@ Change these key-value with your prefer.
         +org-roam-open-buffer-on-find-file nil)
 
   (setq org-roam-capture-templates
-        '("d" "default" plain (function org-roam--capture-get-point)
+        '(("d" "default" plain (function org-roam--capture-get-point)
           "%?"
           :file-name "${slug}"
           :head "#+title: ${title}\n#+options: toc:nil date:nil num:nil\n"
-          :unnarrowed t)))
+          :unnarrowed t))))
 
 #+end_src
 
