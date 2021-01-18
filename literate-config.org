@@ -536,9 +536,21 @@ Change these key-value with your prefer.
 - [X] org-roam config
 #+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
 (after! org-roam
+  :hook
+  (add-hook 'org-mode-hook #'org-roam-mode)
+
+  :config
   (setq org-roam-directory (concat org-directory "roam/")
         org-roam-db-location (concat org-directory "roam/org-roam.db")
-        +org-roam-open-buffer-on-find-file nil))
+        +org-roam-open-buffer-on-find-file nil)
+
+  (setq org-roam-capture-templates
+        '("d" "default" plain (function org-roam--capture-get-point)
+          "%?"
+          :file-name "${slug}"
+          :head "#+title: ${title}\n#+options: toc:nil date:nil num:nil\n"
+          :unnarrowed t)))
+
 #+end_src
 
 *LaTeX related config(support chinese font when export to pdf)*
