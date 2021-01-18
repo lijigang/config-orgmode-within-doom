@@ -137,7 +137,15 @@ Change these key-value with your prefer.
 (setq doom-localleader-key ",")
 
 (setq doom-font (font-spec :family "Roboto Mono" :size 20)
-      doom-variable-pitch-font (font-spec :family "Microsoft YaHei" :size 16))
+      doom-serif-font (font-spec :family "Roboto Mono" )
+      doom-variable-pitch-font (font-spec :family "Microsoft Yahei" :weight 'extra-bold)
+      doom-big-font (font-spec :family "Microsoft Yahei" :size 23))
+
+(defun colawithsauce/set-fonts ()
+  (set-fontset-font "fontset-default" 'unicode (font-spec :family "Microsoft Yahei") nil 'prepend)
+  (set-fontset-font "fontset-default" 'symbol (font-spec :family "Apple Color Emoji") nil 'prepend))
+
+(add-hook! 'after-setting-font-hook :append 'colawithsauce/set-fonts)
 
 (add-hook! 'org-mode-hook #'mixed-pitch-mode)
 
