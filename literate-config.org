@@ -1,0 +1,643 @@
+#+title: Literate config for orgmode user (non-programmer)
+
+* Config doom built-in modules(init.el)
+#+begin_src emacs-lisp :tangle "~/.doom.d/init.el" :mkdirp yes
+;;; init.el -*- lexical-binding: t; -*-
+
+(doom! :input
+       ;;chinese
+
+       :completion
+       company           ; the ultimate code completion backend
+       ;;helm              ; the *other* search engine for love and life
+       ;;ido               ; the other *other* search engine...
+       ivy               ; a search engine for love and life
+
+       :ui
+       ;;deft              ; notational velocity for Emacs
+       doom              ; what makes DOOM look the way it does
+       ;;fill-column       ; a `fill-column' indicator
+       hl-todo           ; highlight TODO/FIXME/NOTE/DEPRECATED/HACK/REVIEW
+       ;;hydra
+       ;;minimap           ; show a map of the code on the side
+       ;;modeline          ; snazzy, Atom-inspired modeline, plus API
+       ;;nav-flash         ; blink cursor line after big motions
+       ;;neotree           ; a project drawer, like NERDTree for vim
+       ophints           ; highlight the region an operation acts on
+       (popup +defaults)   ; tame sudden yet inevitable temporary windows
+       ;;treemacs          ; a project drawer, like neotree but cooler
+       ;; vc-gutter         ; vcs diff in the fringe
+       ;; vi-tilde-fringe   ; fringe tildes to mark beyond EOB
+       ;;window-select     ; visually switch windows
+       workspaces        ; tab emulation, persistence & separate workspaces
+       zen               ; distraction-free coding or writing
+
+       :editor
+       (evil +everywhere); come to the dark side, we have cookies
+       file-templates    ; auto-snippets for empty files
+       fold              ; (nigh) universal code folding
+       ;;(format +onsave)  ; automated prettiness
+       ;;multiple-cursors  ; editing in many places at once
+       ;;objed             ; text object editing for the innocent
+       ;;parinfer          ; turn lisp into python, sort of
+       ;;rotate-text       ; cycle region at point between text candidates
+       snippets          ; my elves. They type so I don't have to
+       ;;word-wrap         ; soft wrapping with language-aware indent
+
+       :emacs
+       dired             ; making dired pretty [functional]
+       electric          ; smarter, keyword-based electric-indent
+       ;;ibuffer         ; interactive buffer management
+       undo              ; persistent, smarter undo for your inevitable mistakes
+       ;;vc                ; version-control and Emacs, sitting in a tree
+
+       :term
+       ;;eshell            ; the elisp shell that works everywhere
+       ;;shell             ; simple shell REPL for Emacs
+       ;;term              ; basic terminal emulator for Emacs
+       ;;vterm             ; the best terminal emulation in Emacs
+
+       :checkers
+       syntax              ; tasing you for every semicolon you forget
+       ;;spell             ; tasing you for misspelling mispelling
+       ;;grammar           ; tasing grammar mistake every you make
+
+       :tools
+       ;;editorconfig      ; let someone else argue about tabs vs spaces
+       (eval +overlay)     ; run code, run (also, repls)
+       ;;gist              ; interacting with github gists
+       lookup              ; navigate your code and its documentation
+       magit             ; a git porcelain for Emacs
+       ;;pdf               ; pdf enhancements
+       ;;rgb               ; creating color strings
+
+       :os
+       (:if IS-MAC macos)  ; improve compatibility with macOS
+
+       :lang
+       emacs-lisp        ; drown in parentheses
+       latex             ; writing papers in Emacs has never been so fun
+       ;;markdown          ; writing docs for people to ignore
+       (org +roam +dragndrop +gnuplot +pandoc +present)
+       ;;plantuml          ; diagrams for confusing people more
+       sh                ; she sells {ba,z,fi}sh shells on the C xor
+       yaml              ; JSON, but readable
+
+       :email
+       ;;(mu4e +gmail)
+       ;;notmuch
+       ;;(wanderlust +gmail)
+
+       :app
+       ;;calendar
+       ;;irc               ; how neckbeards socialize
+       (rss +org)        ; emacs as an RSS reader
+       ;;twitter           ; twitter client https://twitter.com/vnought
+
+       :config
+       ;;literate
+       (default +bindings +smartparens))
+#+end_src
+
+* Config packages you want(packages.el)
+#+begin_src emacs-lisp :tangle "~/.doom.d/packages.el" :mkdirp yes
+;; -*- no-byte-compile: t; -*-
+;;; $DOOMDIR/packages.el
+
+(package! visual-fill-column)
+(package! org-page)
+;;(package! org-roam-server)
+(package! dired-narrow)
+#+end_src
+
+* Config of everything(config.el)
+Change these key-value with your prefer.
+
+*Personal custom*
+
+#+begin_src emacs-lisp :tangle "~/.doom.d/config.el" :mkdirp yes
+;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
+
+;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Personal Infomation ;;
+;;;;;;;;;;;;;;;;;;;;;;;;;
+
+(setq user-full-name "lijigang"
+      user-mail-address "i@lijigang.com")
+
+(setq org-directory "~/Documents/emacs/org/")
+
+(setq frame-title-format '("你要对这个世界有点意见"))
+
+(setq doom-theme 'whiteboard)
+
+(setq evil-snipe-override-evil-repeat-keys nil)
+(setq doom-localleader-key ",")
+
+(setq doom-font (font-spec :family "Roboto Mono" :size 20)
+      doom-variable-pitch-font (font-spec :family "Microsoft YaHei" :size 16))
+
+(add-hook! 'org-mode-hook #'mixed-pitch-mode)
+
+(setq mixed-pitch-variable-pitch-cursor nil)
+
+#+end_src
+
+*UI Related Config*
+
+- [X] Hide drawer
+#+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
+;;;;;;;;;;;;;;;;;;;;;;;
+;; UI related config ;;
+;;;;;;;;;;;;;;;;;;;;;;;
+;; Hide Drawer
+(defun org-cycle-hide-drawers (state)
+  "Re-hide all drawers after a visibility state change."
+  (when (and (derived-mode-p 'org-mode)
+             (not (memq state '(overview folded contents))))
+    (save-excursion
+      (let* ((globalp (memq state '(contents all)))
+             (beg (if globalp
+                    (point-min)
+                    (point)))
+             (end (if globalp
+                    (point-max)
+                    (if (eq state 'children)
+                      (save-excursion
+                        (outline-next-heading)
+                        (point))
+                      (org-end-of-subtree t)))))
+        (goto-char beg)
+        (while (re-search-forward org-drawer-regexp end t)
+          (save-excursion
+            (beginning-of-line 1)
+            (when (looking-at org-drawer-regexp)
+              (let* ((start (1- (match-beginning 0)))
+                     (limit
+                       (save-excursion
+                         (outline-next-heading)
+                           (point)))
+                     (msg (format
+                            (concat
+                              "org-cycle-hide-drawers:  "
+                              "`:END:`"
+                              " line missing at position %s")
+                            (1+ start))))
+                (if (re-search-forward "^[ \t]*:END:" limit t)
+                  (outline-flag-region start (point-at-eol) t)
+                  (user-error msg))))))))))
+#+end_src
+
+- [X] Hide export options (title/author/date/email..)
+#+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
+;; Hide export options
+(defvar my-org-hidden-keywords
+  '(title author date email tags options))
+
+(defun org-hide-keywords ()
+  (save-excursion
+    (let (beg end ov)
+      (goto-char (point-min))
+      (while (re-search-forward
+              (concat "\\(^[ \t]*#\\+\\)\\("
+                      (mapconcat (lambda (kw)
+                                   (format "%s:\s"(symbol-name kw)))
+                                 my-org-hidden-keywords "\\|")
+                      "\\)")
+              nil t)
+        (setq beg (match-beginning 1)
+              end (match-end 2)
+              ov  (make-overlay beg end))
+    (overlay-put ov 'invisible t)))))
+
+(add-hook 'org-mode-hook 'org-hide-keywords)
+#+end_src
+
+- [X] Hide block header and footer
+#+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
+;; Hide block header and footer
+(with-eval-after-load 'org
+  (defvar-local rasmus/org-at-src-begin -1
+    "Variable that holds whether last position was a ")
+
+  (defvar rasmus/ob-header-symbol ?☰
+    "Symbol used for babel headers")
+
+  (defun rasmus/org-prettify-src--update ()
+    (let ((case-fold-search t)
+          (re "^[ \t]*#\\+begin_src[ \t]+[^ \f\t\n\r\v]+[ \t]*")
+          found)
+      (save-excursion
+        (goto-char (point-min))
+        (while (re-search-forward re nil t)
+          (goto-char (match-end 0))
+          (let ((args (org-trim
+                       (buffer-substring-no-properties (point)
+                                                       (line-end-position)))))
+            (when (org-string-nw-p args)
+              (let ((new-cell (cons args rasmus/ob-header-symbol)))
+                (cl-pushnew new-cell prettify-symbols-alist :test #'equal)
+                (cl-pushnew new-cell found :test #'equal)))))
+        (setq prettify-symbols-alist
+              (cl-set-difference prettify-symbols-alist
+                                 (cl-set-difference
+                                  (cl-remove-if-not
+                                   (lambda (elm)
+                                     (eq (cdr elm) rasmus/ob-header-symbol))
+                                   prettify-symbols-alist)
+                                  found :test #'equal)))
+        ;; Clean up old font-lock-keywords.
+        (font-lock-remove-keywords nil prettify-symbols--keywords)
+        (setq prettify-symbols--keywords (prettify-symbols--make-keywords))
+        (font-lock-add-keywords nil prettify-symbols--keywords)
+        (while (re-search-forward re nil t)
+          (font-lock-flush (line-beginning-position) (line-end-position))))))
+
+  (defun rasmus/org-prettify-src ()
+    "Hide src options via `prettify-symbols-mode'.
+
+  `prettify-symbols-mode' is used because it has uncollpasing. It's
+  may not be efficient."
+    (let* ((case-fold-search t)
+           (at-src-block (save-excursion
+                           (beginning-of-line)
+                           (looking-at "^[ \t]*#\\+begin_src[ \t]+[^ \f\t\n\r\v]+[ \t]*"))))
+      ;; Test if we moved out of a block.
+      (when (or (and rasmus/org-at-src-begin
+                     (not at-src-block))
+                ;; File was just opened.
+                (eq rasmus/org-at-src-begin -1))
+        (rasmus/org-prettify-src--update))
+      (setq rasmus/org-at-src-begin at-src-block)))
+
+  (defun rasmus/org-prettify-symbols ()
+    (mapc (apply-partially 'add-to-list 'prettify-symbols-alist)
+          (cl-reduce 'append
+                     (mapcar (lambda (x) (list x (cons (upcase (car x)) (cdr x))))
+                             `(("#+begin_src" . ?⏠) ;; ➤ ➟ ✎
+                               ("#+end_src"   . ?⏡) ;; ⏹
+                               ("#+header:" . ,rasmus/ob-header-symbol)
+                               ("#+begin_quote" . ?❝)
+                               ("#+end_quote" . ?❞)))))
+    (turn-on-prettify-symbols-mode)
+    (add-hook 'post-command-hook 'rasmus/org-prettify-src t t))
+
+  (add-hook 'org-mode-hook #'rasmus/org-prettify-symbols))
+
+#+end_src
+
+- [X] Hide all the headline stars
+#+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
+;; Hide all the headline stars
+(defun chunyang-org-mode-hide-stars ()
+  (font-lock-add-keywords
+   nil
+   '(("^\\*+ "
+      (0
+       (prog1 nil
+         (put-text-property (match-beginning 0) (match-end 0)
+                            'face (list :foreground
+                                        (face-attribute
+                                         'default :background)))))))))
+
+(defun chunyang-org-mode-remove-stars ()
+  (font-lock-add-keywords
+   nil
+   '(("^\\*+ "
+      (0
+       (prog1 nil
+         (put-text-property (match-beginning 0) (match-end 0)
+                            'invisible t)))))))
+
+;;(add-hook 'org-mode-hook #'chunyang-org-mode-hide-stars)
+(add-hook 'org-mode-hook #'chunyang-org-mode-remove-stars)
+
+#+end_src
+
+- [X] Change org headline size
+#+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
+
+;; Change org headline size
+(let* ((variable-tuple (cond ((x-list-fonts "Source Code Pro") '(:font "Source Code Pro"))
+                             ((x-list-fonts "Roboto Mono") '(:font "Roboto Mono"))
+                             (nil (warn "Cannot find a Sans Serif Font.  Install Source Code Pro."))))
+       (base-font-color     (face-foreground 'default nil 'default))
+       (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
+
+  (custom-theme-set-faces 'user
+                              `(org-level-8 ((t (,@headline ,@variable-tuple))))
+                              `(org-level-7 ((t (,@headline ,@variable-tuple))))
+                              `(org-level-6 ((t (,@headline ,@variable-tuple))))
+                              `(org-level-5 ((t (,@headline ,@variable-tuple))))
+                              `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.1))))
+                              `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.25))))
+                              `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.4))))
+                              `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.6))))
+                              `(org-document-title ((t (,@headline ,@variable-tuple :height 1.75 :underline nil))))))
+  #+end_src
+
+- [X] Other ui config
+#+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
+(add-hook! org-mode :append
+           #'visual-line-mode
+           #'visual-fill-column-mode
+           #'variable-pitch-mode)
+
+(menu-bar-mode -1) ;; minimal chrome
+(tool-bar-mode -1) ;; no toolbar
+(scroll-bar-mode -1) ;; disable scroll bars
+
+(setq display-line-numbers-type nil)
+
+(setq initial-frame-alist '((top . 70) (left . 800) (width . 160) (height . 50)))
+
+(set-frame-parameter (selected-frame)
+                     'internal-border-width 24)
+
+(setq default-frame-alist
+      (append (list '(width  . 80) '(height . 40)
+                    '(vertical-scroll-bars . nil)
+                    ;;'(font . "Roboto Mono 14")
+                    '(internal-border-width . 24))))
+
+;; Line spacing, can be 0 for code and 1 or 2 for text
+(setq-default line-spacing 0.2)
+
+;; Underline line at descent position, not baseline position
+(setq x-underline-at-descent-line t)
+
+;; No ugly button for checkboxes
+(setq widget-image-enable nil)
+
+;; Line cursor and no blink
+(set-default 'cursor-type  '(bar . 3))
+(blink-cursor-mode 0)
+
+;; No sound
+(setq visible-bell t)
+(setq ring-bell-function 'ignore)
+
+;; Paren mode is part of the theme
+(show-paren-mode t)
+
+;; No fringe
+(fringe-mode '(0 . 0))
+
+;; Vertical window divider
+(setq window-divider-default-right-width 3)
+(setq window-divider-default-places 'right-only)
+(window-divider-mode)
+
+#+end_src
+
+*Orgmode Related config*
+- [X] Oh, org mode
+#+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
+
+(after! org
+  (setq org-todo-keywords
+        '((sequence "TODO" "HACK" "|" "DONE")))
+
+  ;; 打开 org-indent mode
+  (setq org-startup-indented t
+        org-confirm-babel-evaluate nil
+        org-use-property-inheritance t
+        org-export-with-sub-superscripts nil
+        org-export-use-babel nil
+        org-pretty-entities nil
+        org-use-speed-commands t
+        org-return-follows-link t
+        org-outline-path-complete-in-steps nil
+        org-hide-emphasis-markers t
+        org-ellipsis  "⠳"
+        org-tags-column -80
+        org-image-actual-width nil
+        org-support-shift-select 'always
+        org-html-htmlize-output-type 'css
+        org-fontify-whole-heading-line t
+        org-fontify-done-headline t
+        org-fontify-quote-and-verse-blocks t
+        org-src-fontify-natively t
+        org-src-tab-acts-natively t
+        org-src-preserve-indentation t
+        org-edit-src-content-indentation 0
+        org-adapt-indentation nil
+        org-special-ctrl-a/e t
+        org-special-ctrl-k t
+        org-export-with-broken-links t
+        org-yank-adjusted-subtrees t
+        org-insert-heading-respect-content nil
+        org-highlight-latex-and-related '(latex)
+        org-html-head-include-default-style nil
+        org-export-html-style-include-scripts nil)
+
+  (setq org-format-latex-options
+        (quote (:foreground default
+                :background default
+                :scale 2.0
+                :matchers ("begin" "$1" "$" "$$" "\\(" "\\["))))
+
+    ;; Colorize org babel output. Without this color codes are left in the output.
+  (defun my/display-ansi-colors ()
+    (interactive)
+    (let ((inhibit-read-only t))
+      (ansi-color-apply-on-region (point-min) (point-max))))
+
+  (add-hook 'org-babel-after-execute-hook #'my/display-ansi-colors)
+
+  (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
+  (add-hook 'org-babel-after-execute-hook 'org-toggle-latex-fragment 'append)
+
+  (setq org-html-head
+        "<link rel='stylesheet' type='text/css' href='https://www.labri.fr/perso/nrougier/GTD/GTD.css'/>")
+
+  ;; active Org-babel languages
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (shell . t)
+     (gnuplot . t)))
+
+  (setq org-agenda-prefix-format '((agenda . "%t %s ")
+                                   (todo   . " ")))
+
+  (setq org-agenda-clockreport-parameter-plist
+        '(:link t :maxlevel 6 :fileskip0 t :compact t :narrow 60 :score 0))
+
+  (setq org-agenda-start-on-weekday nil
+        org-agenda-log-mode-items '(clock)
+        org-agenda-include-all-todo t
+        org-agenda-time-leading-zero t
+        org-agenda-use-time-grid nil
+        org-agenda-include-diary t
+        org-agenda-diary-file (concat org-directory "private/standard-diary")
+        org-agenda-files (list (concat org-directory "roam/"))
+        diary-file (concat org-directory "private/standard-diary")))
+#+end_src
+
+- [X] org-roam config
+#+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
+(after! org-roam
+  (setq org-roam-directory (concat org-directory "roam/")
+        org-roam-db-location (concat org-directory "roam/org-roam.db")
+        +org-roam-open-buffer-on-find-file nil))
+#+end_src
+
+*LaTeX related config(support chinese font when export to pdf)*
+#+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
+
+(setq Tex-command-default "XeLaTeX")
+
+(with-eval-after-load 'ox-latex
+  (add-to-list 'org-latex-classes
+               '("ctexart" "\\documentclass[11pt]{ctexart}"
+                 ("\\section{%s}" . "\\section*{%s}")
+                 ("\\subsection{%s}" . "\\subsection*{%s}")
+                 ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+                 ("\\paragraph{%s}" . "\\paragraph*{%s}")
+                 ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
+  (setq org-latex-default-class "ctexart")
+  (setq org-latex-compiler "xelatex"))
+#+end_src
+
+*Doom module Realted Config*
+
+- [X] ivy
+#+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
+
+(after! ivy
+  ;; Causes open buffers and recentf to be combined in ivy-switch-buffer
+  (setq ivy-use-virtual-buffers t
+        counsel-find-file-at-point t
+        ivy-wrap nil
+        ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center))
+        ivy-posframe-height-alist '((t . 20))
+        ivy-posframe-parameters '((internal-border-width . 1))
+        ivy-posframe-width 100))
+#+end_src
+
+- [X] dired
+#+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
+
+(after! dired
+  (setq dired-listing-switches "-aBhl  --group-directories-first"
+        dired-dwim-target t
+        dired-recursive-copies (quote always)
+        dired-recursive-deletes (quote top)
+        ;; Directly edit permisison bits!
+        wdired-allow-to-change-permissions t
+        dired-omit-mode nil))
+#+end_src
+
+- [X] org-download
+#+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
+
+(use-package org-download
+  :config
+  (add-hook 'dired-mode-hook 'org-download-enable)
+  (setq-default org-download-heading-lvl nil
+                org-download-image-dir "./images"
+                org-download-screenshot-method "pngpaste %s"
+                org-download-timestamp ""
+                org-download-screenshot-file (expand-file-name "screenshot.jpg" temporary-file-directory)))
+#+end_src
+
+*Remap Keybindings*
+#+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
+(map!
+ :leader :desc "All in M-x" "SPC" #'counsel-M-x
+ :leader :desc "Find file" "f f" #'counsel-find-file
+
+ "C-h h" 'helpful-at-point
+ "C-h f" 'helpful-function
+ "C-h v" 'helpful-variable
+ "C-h k" 'helpful-key
+
+ "C-s" 'swiper-isearch)
+#+end_src
+
+*Misc config*
+#+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
+(setq confirm-kill-emacs nil)
+
+(add-hook! 'elfeed-search-mode-hook 'elfeed-update)
+(add-hook! 'before-save-hook 'delete-trailing-whitespace)
+
+;; 文件有更新, buffer 自动更新
+(global-auto-revert-mode)
+
+;; 编码选用 UTF-8
+(prefer-coding-system 'utf-8)
+(set-default-coding-systems 'utf-8)
+(setq default-buffer-file-coding-system 'utf-8)
+
+
+;; 时间戳使用英文星期
+(setq system-time-locale "C")
+
+;; Smooth mouse scrolling
+(setq mouse-wheel-scroll-amount '(2 ((shift) . 1))  ; scroll two lines at a time
+      mouse-wheel-progressive-speed nil             ; don't accelerate scrolling
+      mouse-wheel-follow-mouse t                    ; scroll window under mouse
+      scroll-step 1)
+
+#+end_src
+
+*Finally, config the packages you want*
+#+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
+;;(use-package! org-roam-server
+;;    :config
+;;    (setq org-roam-server-host "127.0.0.1"
+;;          org-roam-server-port 9090
+;;          org-roam-server-export-inline-images t
+;;          org-roam-server-authenticate nil
+;;          org-roam-server-network-label-truncate t
+;;          org-roam-server-network-label-truncate-length 60
+;;          org-roam-server-network-label-wrap-length 20))
+
+(use-package org-page
+  :config
+  (progn
+    (setq op/site-main-title "你对这个世界要有点意见")
+    (setq op/personal-github-link "https://github.com/lijigang")
+    (setq op/repository-directory "~/lijigang")
+    (setq op/site-domain "http://lijigang.github.io/")
+    (setq op/theme-root-directory (concat org-directory "private/"))
+    (setq op/theme 'ljg)
+    (setq op/load-directory "~/.emacs.d/.local/straight/repos/org-page/")
+    (setq op/highlight-render 'js)
+    (setq op/category-ignore-list '("themes" "assets" "images"))
+    (setq op/category-config-alist
+    '(("blog"
+    :show-meta t
+    :show-comment t
+    :uri-generator op/generate-uri
+    :uri-template "/blog/%y/%m/%d/%t/"
+    :sort-by :date     ;; how to sort the posts
+    :category-index nil) ;; generate category index or not
+    ("index"
+    :show-meta nil
+    :show-comment nil
+    :uri-generator op/generate-uri
+    :uri-template "/"
+    :sort-by :date
+    :category-index nil)
+    ("about"
+    :show-meta nil
+    :show-comment nil
+    :uri-generator op/generate-uri
+    :uri-template "/about/"
+    :sort-by :date
+    :category-index nil)))))
+
+
+(use-package! dired-narrow
+              :commands (dired-narrow-fuzzy)
+              :init
+              (map! :map dired-mode-map
+                    :desc "narrow" "/" #'dired-narrow-fuzzy))
+
+;; Directly edit permisison bits!
+(setq wdired-allow-to-change-permissions t)
+
+#+end_src

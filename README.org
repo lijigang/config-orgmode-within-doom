@@ -1,0 +1,46 @@
+:PROPERTIES:
+:ID:       61c50912-ab3d-4fbf-8b9c-89e7966b25ec
+:END:
+#+TITLE: Readme
+
+Emacs configuration created for heavy Orgmode users among non-programmers.
+
+[[./images/demo.png]]
+
+* Install
+1.  Install Emacs
+   #+begin_src shell
+    brew tap d12frosted/emacs-plus
+    brew install emacs-plus
+    ln -s /usr/local/opt/emacs-plus/Emacs.app /Applications/Emacs.app
+   #+end_src
+2.  Install Doom
+   #+begin_src shell
+    git clone https://github.com/hlissner/doom-emacs -b develop ~/.emacs.d
+
+    ~/.emacs.d/bin/doom install
+   #+end_src
+3. Modify shell PATH
+   #+begin_src shell
+    # if you use zsh
+    echo 'export PATH=”$HOME/.emacs.d/bin:$PATH'  >> ~/.zshrc
+   #+end_src
+4.  Install this config
+   #+begin_src shell
+    # Download config
+    cd
+    git clone https://github.com/lijigang/config-orgmode-within-doom.git
+
+    # Open config file
+    emacs config-orgmode-within-doom/config.org
+   #+end_src
+
+   #+begin_src elisp
+    M-x: org-babel-tangle
+   #+end_src
+
+
+* TODO [0/2]
+
+- [ ] add contrast images for every configuration
+- [ ] Fix org-roam-server config
