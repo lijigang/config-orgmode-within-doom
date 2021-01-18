@@ -108,6 +108,8 @@
 (package! org-page)
 ;;(package! org-roam-server)
 (package! dired-narrow)
+(package! valign)
+
 #+end_src
 
 * Config of everything(config.el)
@@ -502,12 +504,25 @@ Change these key-value with your prefer.
 
 *Doom module Realted Config*
 
+- [X] Company
+#+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
+(after! company
+  (setq company-tooltip-limit 5
+        company-tooltip-minimum-width 80
+        company-tooltip-minimum 5
+        company-backends
+        '(company-capf company-dabbrev company-files company-yasnippet)
+        company-global-modes '(not comint-mode erc-mode message-mode help-mode gud-mode)))
+
+#+end_src
+
 - [X] ivy
 #+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
 
 (after! ivy
   ;; Causes open buffers and recentf to be combined in ivy-switch-buffer
   (setq ivy-use-virtual-buffers t
+        +ivy-project-search-engines '(rg)
         counsel-find-file-at-point t
         ivy-wrap nil
         ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center))
@@ -640,4 +655,8 @@ Change these key-value with your prefer.
 ;; Directly edit permisison bits!
 (setq wdired-allow-to-change-permissions t)
 
+;; Use valign package to solve table align proble   m
+(use-package! valign
+  :config
+  (add-hook 'org-mode-hook #'valign-mode))
 #+end_src
