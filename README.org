@@ -1,6 +1,3 @@
-:PROPERTIES:
-:ID:       61c50912-ab3d-4fbf-8b9c-89e7966b25ec
-:END:
 #+TITLE: Readme
 
 Emacs configuration created for heavy Orgmode users among non-programmers.
@@ -42,7 +39,14 @@ Emacs configuration created for heavy Orgmode users among non-programmers.
    #+end_src
 
 
-* TODO [0/2]
+
+* Ideas from [[tanshq@gmail.com][@tanmo]]  [5/7]
 
 - [ ] add contrast images for every configuration
 - [ ] Fix org-roam-server config
+- [X] Hide tags
+- [X] Hide export options
+- [X] Hide drawers
+- [X] Hide block header and footer
+- [X] Hide all of stars before headlines
+- [X] Change org headline size
