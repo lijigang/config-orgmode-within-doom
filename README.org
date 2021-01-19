@@ -40,12 +40,12 @@ Emacs configuration created for heavy Orgmode users among non-programmers.
 
 
 
-* Ideas from [[mailto:tanshq@gmail.com][@tanmo]]  [6/10]
+* Ideas from [[mailto:tanshq@gmail.com][@tanmo]]  [7/10]
 
 - [ ] add contrast images for every configuration
 - [ ] Fix org-roam-server config
 - [ ] Remap keybindings: Cmd+1/2/3/4 to headline1/2/3/4
-- [ ] Remap keybindings: Cmd+i/b/u  -> italic/bold/underlined
+- [X] Remap keybindings: Cmd+i/b/u  -> italic/bold/underlined
 - [X] Hide tags
 - [X] Hide export options
 - [X] Hide drawers

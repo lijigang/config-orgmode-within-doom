@@ -675,6 +675,28 @@ Change these key-value with your prefer.
       mouse-wheel-follow-mouse t                    ; scroll window under mouse
       scroll-step 1)
 
+;; 插入今年的时间进度条
+(defun make-progress (width percent has-number?)
+  (let* ((done (/ percent 100.0))
+         (done-width (floor (* width done))))
+    (concat
+     "["
+     (make-string done-width ?/)
+     (make-string (- width done-width) ? )
+     "]"
+     (if has-number? (concat " " (number-to-string percent) "%"))
+     )))
+
+(defun insert-day-progress ()
+  (interactive)
+  (let* ((today (time-to-day-in-year (current-time)))
+         (percent (floor (* 100 (/ today 365.0)))))
+    (insert (make-progress 30 percent t))
+    ))
+
+;; SPC i p to insert day progress
+(map! :leader :desc "Insert day progress" "i p" #'insert-day-progress)
+
 #+end_src
 
 *Finally, config the packages you want*
