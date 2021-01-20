@@ -621,6 +621,7 @@
   ;; Causes open buffers and recentf to be combined in ivy-switch-buffer
   (setq ivy-use-virtual-buffers t
         +ivy-project-search-engines '(rg)
+        ivy-re-builders-alist '((swiper . ivy--regex-plus) (t . ivy--regex-fuzzy))
         counsel-find-file-at-point t
         ivy-wrap nil
         ivy-posframe-display-functions-alist '((t . ivy-posframe-display-at-frame-top-center))
