@@ -137,7 +137,6 @@
 (setq doom-theme 'whiteboard)
 
 (setq evil-snipe-override-evil-repeat-keys nil)
-(setq doom-localleader-key ",")
 
 (setq doom-font (font-spec :family "Roboto Mono" :size 20)
       doom-serif-font (font-spec :family "Roboto Mono" )
@@ -208,9 +207,6 @@
 
 *** Hide drawer
 #+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
-;;;;;;;;;;;;;;;;;;;;;;;
-;; UI related config ;;
-;;;;;;;;;;;;;;;;;;;;;;;
 ;; Hide Drawer
 (defun org-cycle-hide-drawers (state)
   "Re-hide all drawers after a visibility state change."
@@ -535,8 +531,13 @@
 
   ;; REVIEW : Change to your personal prefer
   ;; I want all of finished tasks to archive in one file --archive.org
-  (setq org-archive-location "archive.org::")
+  (setq org-archive-location "archive.org::"))
 
+#+end_src
+*** org agenda related
+#+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
+
+(after! org
   (setq org-agenda-prefix-format '((agenda . "%t %s ")
                                    (todo   . " ")))
 
@@ -544,7 +545,7 @@
         '(:link t :maxlevel 6 :fileskip0 t :compact t :narrow 60 :score 0))
 
   ;; REVIEW : Change to your personal prefer
-  (setq org-agenda-files (list (concat org-directory "roam/")))
+  (setq org-agenda-files (list (concat org-directory "roam/inbox.org")))
 
   ;; REVIEW : Change to your personal prefer
   (setq org-agenda-diary-file (concat org-directory "private/standard-diary"))
@@ -559,7 +560,6 @@
         org-agenda-use-time-grid nil
         org-agenda-include-diary t))
 #+end_src
-
 *** org-roam config
 #+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
 (after! org-roam
@@ -662,6 +662,9 @@
 #+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
 
 ;; REVIEW : Change to your personal prefer
+;; Used spacemacs-like
+(setq doom-localleader-key ",")
+
 (map!
  ;; 众妙之门, 值得分配一个 SPC SPC
  :leader :desc "All in M-x" "SPC" #'counsel-M-x
@@ -678,14 +681,15 @@
 #+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
 
 ;; REVIEW : Change to your personal prefer
-(map! :map org-mode-map
-      "s-k" #'org-move-item-up
-      "s-j" #'org-move-item-down
-      "s-<up>" #'org-move-subtree-up
-      "s-<down>" #'org-move-subtree-down
+(map!
+ :map org-mode-map
+ "s-k" #'org-move-item-up
+ "s-j" #'org-move-item-down
+ "s-<up>" #'org-move-subtree-up
+ "s-<down>" #'org-move-subtree-down
 
-      :localleader
-      "," #'org-ctrl-c-ctrl-c)
+ :localleader
+ "," #'org-ctrl-c-ctrl-c)
 
 ;; I find it easier to use Apple’s Command-i, Command-b, Command-u to set italics, bold, underline. In Org:
 (add-hook 'org-mode-hook
