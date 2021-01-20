@@ -104,6 +104,8 @@
 ;; -*- no-byte-compile: t; -*-
 ;;; $DOOMDIR/packages.el
 
+;; REVIEW : Change to your personal prefer
+
 (package! visual-fill-column)
 (package! org-page)
 ;;(package! org-roam-server)
@@ -113,9 +115,8 @@
 #+end_src
 
 * Config of everything(config.el)
-Change these key-value with your prefer.
 
-*Personal custom*
+** *Personal custom*
 
 #+begin_src emacs-lisp :tangle "~/.doom.d/config.el" :mkdirp yes
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
@@ -123,6 +124,8 @@ Change these key-value with your prefer.
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Personal Infomation ;;
 ;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; REVIEW : Change to your personal prefer
 
 (setq user-full-name "lijigang"
       user-mail-address "i@lijigang.com")
@@ -153,9 +156,9 @@ Change these key-value with your prefer.
 
 #+end_src
 
-*UI Related Config*
+** *UI Related Config*
 
-- [X] Hide tags
+*** Hide tags
 #+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
 ;; Hide tags
 (defun org-toggle-tag-visibility (state)
@@ -203,7 +206,7 @@ Change these key-value with your prefer.
 
 #+end_src
 
-- [X] Hide drawer
+*** Hide drawer
 #+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
 ;;;;;;;;;;;;;;;;;;;;;;;
 ;; UI related config ;;
@@ -246,7 +249,7 @@ Change these key-value with your prefer.
                   (user-error msg))))))))))
 #+end_src
 
-- [X] Hide export options (title/author/date/email..)
+*** Hide export options (title/author/date/email..)
 #+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
 ;; Hide export options
 (defvar my-org-hidden-keywords
@@ -271,7 +274,7 @@ Change these key-value with your prefer.
 (add-hook 'org-mode-hook 'org-hide-keywords)
 #+end_src
 
-- [X] Hide block header and footer
+*** Hide block header and footer
 #+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
 ;; Hide block header and footer
 (with-eval-after-load 'org
@@ -344,7 +347,7 @@ Change these key-value with your prefer.
 
 #+end_src
 
-- [X] Hide all the headline stars
+*** Hide all the headline stars
 #+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
 ;; Hide all the headline stars
 (defun chunyang-org-mode-hide-stars ()
@@ -372,7 +375,7 @@ Change these key-value with your prefer.
 
 #+end_src
 
-- [X] Change org headline size
+*** Change org headline size
 #+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
 
 ;; Change org headline size
@@ -394,7 +397,7 @@ Change these key-value with your prefer.
                               `(org-document-title ((t (,@headline ,@variable-tuple :height 1.75 :underline nil))))))
   #+end_src
 
-- [X] Other ui config
+*** Other ui config
 #+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
 (add-hook! org-mode :append
            #'visual-line-mode
@@ -448,11 +451,12 @@ Change these key-value with your prefer.
 
 #+end_src
 
-*Orgmode Related config*
-- [X] Oh, org mode
+** Orgmode Related config
+*** Oh, org mode
 #+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
 
 (after! org
+  ;; REVIEW : Change to your personal prefer
   (setq org-todo-keywords
         '((sequence "TODO" "HACK" "|" "DONE")))
 
@@ -467,7 +471,10 @@ Change these key-value with your prefer.
         org-return-follows-link t
         org-outline-path-complete-in-steps nil
         org-hide-emphasis-markers t
+
+        ;; REVIEW : Change to your personal prefer
         org-ellipsis  "⠳"
+
         org-tags-column -80
         org-image-actual-width nil
         org-support-shift-select 'always
@@ -506,6 +513,7 @@ Change these key-value with your prefer.
   (add-hook 'org-babel-after-execute-hook 'org-display-inline-images 'append)
   (add-hook 'org-babel-after-execute-hook 'org-toggle-latex-fragment 'append)
 
+  ;; REVIEW : Change to your personal prefer
   (setq org-html-head
         "<link rel='stylesheet' type='text/css' href='https://www.labri.fr/perso/nrougier/GTD/GTD.css'/>")
 
@@ -517,6 +525,7 @@ Change these key-value with your prefer.
      (gnuplot . t)))
 
 
+  ;; REVIEW : Change to your personal prefer
   ;; I find it easier to use Apple’s Command-i, Command-b, Command-u to set italics, bold, underline. In Org:
   (add-hook 'org-mode-hook
             '(lambda ()
@@ -525,6 +534,8 @@ Change these key-value with your prefer.
                 (define-key org-mode-map (kbd "s-u") (kbd "\C-c \C-x \C-f _"))
                 ))
 
+  ;; REVIEW : Change to your personal prefer
+  ;; I want all of finished tasks to archive in one file --archive.org
   (setq org-archive-location "archive.org::")
 
   (setq org-agenda-prefix-format '((agenda . "%t %s ")
@@ -533,28 +544,37 @@ Change these key-value with your prefer.
   (setq org-agenda-clockreport-parameter-plist
         '(:link t :maxlevel 6 :fileskip0 t :compact t :narrow 60 :score 0))
 
+  ;; REVIEW : Change to your personal prefer
+  (setq org-agenda-files (list (concat org-directory "roam/")))
+
+  ;; REVIEW : Change to your personal prefer
+  (setq org-agenda-diary-file (concat org-directory "private/standard-diary"))
+
+  ;; REVIEW : Change to your personal prefer
+  (setq diary-file (concat org-directory "private/standard-diary"))
+
   (setq org-agenda-start-on-weekday nil
         org-agenda-log-mode-items '(clock)
         org-agenda-include-all-todo t
         org-agenda-time-leading-zero t
         org-agenda-use-time-grid nil
-        org-agenda-include-diary t
-        org-agenda-diary-file (concat org-directory "private/standard-diary")
-        org-agenda-files (list (concat org-directory "roam/"))
-        diary-file (concat org-directory "private/standard-diary")))
+        org-agenda-include-diary t))
 #+end_src
 
-- [X] org-roam config
+*** org-roam config
 #+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
 (after! org-roam
   :hook
   (add-hook 'org-mode-hook #'org-roam-mode)
 
   :config
+
+  ;; REVIEW : Change to your personal prefer
   (setq org-roam-directory (concat org-directory "roam/")
         org-roam-db-location (concat org-directory "roam/org-roam.db")
         +org-roam-open-buffer-on-find-file nil)
 
+  ;; REVIEW : Change to your personal prefer
   (setq org-roam-capture-templates
         '(("d" "default" plain (function org-roam--capture-get-point)
           "%?"
@@ -564,7 +584,7 @@ Change these key-value with your prefer.
 
 #+end_src
 
-*LaTeX related config(support chinese font when export to pdf)*
+*** *LaTeX related config(support chinese font when export to pdf)*
 #+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
 
 (setq Tex-command-default "XeLaTeX")
@@ -581,9 +601,9 @@ Change these key-value with your prefer.
   (setq org-latex-compiler "xelatex"))
 #+end_src
 
-*Doom module Realted Config*
+** Doom module Realted Config
 
-- [X] Company
+*** Company
 #+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
 (after! company
   (setq company-tooltip-limit 5
@@ -595,7 +615,7 @@ Change these key-value with your prefer.
 
 #+end_src
 
-- [X] ivy
+*** ivy
 #+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
 
 (after! ivy
@@ -610,7 +630,7 @@ Change these key-value with your prefer.
         ivy-posframe-width 100))
 #+end_src
 
-- [X] dired
+*** dired
 #+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
 
 (after! dired
@@ -623,7 +643,7 @@ Change these key-value with your prefer.
         dired-omit-mode nil))
 #+end_src
 
-- [X] org-download
+*** org-download
 #+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
 
 (use-package org-download
@@ -636,7 +656,7 @@ Change these key-value with your prefer.
                 org-download-screenshot-file (expand-file-name "screenshot.jpg" temporary-file-directory)))
 #+end_src
 
-*Remap Keybindings*
+** *Remap Keybindings*
 #+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
 (map!
  :leader :desc "All in M-x" "SPC" #'counsel-M-x
@@ -650,7 +670,7 @@ Change these key-value with your prefer.
  "C-s" 'swiper-isearch)
 #+end_src
 
-*Misc config*
+** Misc config
 #+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
 (setq confirm-kill-emacs nil)
 
@@ -699,7 +719,7 @@ Change these key-value with your prefer.
 
 #+end_src
 
-*Finally, config the packages you want*
+** *Finally, config the packages you want*
 #+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
 ;;(use-package! org-roam-server
 ;;    :config
@@ -756,7 +776,7 @@ Change these key-value with your prefer.
 ;; Directly edit permisison bits!
 (setq wdired-allow-to-change-permissions t)
 
-;; Use valign package to solve table align proble   m
+;; Use valign package to solve table align problem
 (use-package! valign
   :config
   (add-hook 'org-mode-hook #'valign-mode))
