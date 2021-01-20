@@ -396,6 +396,13 @@
                               `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.6))))
                               `(org-document-title ((t (,@headline ,@variable-tuple :height 1.75 :underline nil))))))
   #+end_src
+*** Change checkbox style
+#+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
+(font-lock-add-keywords
+ 'org-mode
+ `(("^[ \t]*\\(?:[-+*]\\|[0-9]+[).]\\)[ \t]+\\(\\(?:\\[@\\(?:start:\\)?[0-9]+\\][ \t]*\\)?\\[\\(?:X\\|\\([0-9]+\\)/\\2\\)\\][^\n]*\n\\)" 1 'org-headline-done prepend))
+ 'append)
+#+end_src
 
 *** Other ui config
 #+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
@@ -525,14 +532,6 @@
      (gnuplot . t)))
 
 
-  ;; REVIEW : Change to your personal prefer
-  ;; I find it easier to use Apple’s Command-i, Command-b, Command-u to set italics, bold, underline. In Org:
-  (add-hook 'org-mode-hook
-            '(lambda ()
-                (define-key org-mode-map (kbd "s-i") (kbd "\C-c \C-x \C-f /"))
-                (define-key org-mode-map (kbd "s-b") (kbd "\C-c \C-x \C-f *"))
-                (define-key org-mode-map (kbd "s-u") (kbd "\C-c \C-x \C-f _"))
-                ))
 
   ;; REVIEW : Change to your personal prefer
   ;; I want all of finished tasks to archive in one file --archive.org
@@ -649,18 +648,23 @@
 (use-package org-download
   :config
   (add-hook 'dired-mode-hook 'org-download-enable)
-  (setq-default org-download-heading-lvl nil
+  (setq-default org-download-method 'directory
+                org-download-heading-lvl nil
                 org-download-image-dir "./images"
                 org-download-screenshot-method "pngpaste %s"
                 org-download-timestamp ""
                 org-download-screenshot-file (expand-file-name "screenshot.jpg" temporary-file-directory)))
+
 #+end_src
 
 ** *Remap Keybindings*
+*** Global keybindings
 #+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
+
+;; REVIEW : Change to your personal prefer
 (map!
+ ;; 众妙之门, 值得分配一个 SPC SPC
  :leader :desc "All in M-x" "SPC" #'counsel-M-x
- :leader :desc "Find file" "f f" #'counsel-find-file
 
  "C-h h" 'helpful-at-point
  "C-h f" 'helpful-function
@@ -668,6 +672,29 @@
  "C-h k" 'helpful-key
 
  "C-s" 'swiper-isearch)
+
+#+end_src
+*** orgmode keybindings
+#+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
+
+;; REVIEW : Change to your personal prefer
+(map! :map org-mode-map
+      "s-k" #'org-move-item-up
+      "s-j" #'org-move-item-down
+      "s-<up>" #'org-move-subtree-up
+      "s-<down>" #'org-move-subtree-down
+
+      :localleader
+      "," #'org-ctrl-c-ctrl-c)
+
+;; I find it easier to use Apple’s Command-i, Command-b, Command-u to set italics, bold, underline. In Org:
+(add-hook 'org-mode-hook
+          '(lambda ()
+              (define-key org-mode-map (kbd "s-i") (kbd "\C-c \C-x \C-f /"))
+              (define-key org-mode-map (kbd "s-b") (kbd "\C-c \C-x \C-f *"))
+              (define-key org-mode-map (kbd "s-u") (kbd "\C-c \C-x \C-f _"))
+              ))
+
 #+end_src
 
 ** Misc config
