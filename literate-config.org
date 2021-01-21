@@ -112,7 +112,9 @@
 (package! dired-narrow)
 (package! valign)
 (package! rime)
-(package! aggressive-fill-paragraph)
+(package! aggressive-fill-paragraph-mode
+  :recipe
+  (:host github :repo "davidshepherd7/aggressive-fill-paragraph-mode"))
 #+end_src
 
 * Config of everything(config.el)
@@ -823,7 +825,6 @@
   (setq rime-user-data-dir "~/Library/Rime"))
 
 (use-package! aggressive-fill-paragraph-mode
-  :recipe (:host github :repo "davidshepherd7/aggressive-fill-paragraph-mode")
   :config
   (add-hook 'org-mode-hook #'aggressive-fill-paragraph-mode))
 #+end_src
