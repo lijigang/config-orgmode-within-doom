@@ -106,7 +106,7 @@
 
 ;; REVIEW : Change to your personal prefer
 
-(package! visual-fill-column)
+;;(package! visual-fill-column)
 (package! org-page)
 ;;(package! org-roam-server)
 (package! dired-narrow)
@@ -115,6 +115,7 @@
 (package! aggressive-fill-paragraph-mode
   :recipe
   (:host github :repo "davidshepherd7/aggressive-fill-paragraph-mode"))
+(package! pangu-spacing)
 #+end_src
 
 * Config of everything(config.el)
@@ -824,7 +825,12 @@
   :config
   (setq rime-user-data-dir "~/Library/Rime"))
 
+
 (use-package! aggressive-fill-paragraph-mode
+  :hook org-mode)
+
+(use-package! pangu-spacing
   :config
-  (add-hook 'org-mode-hook #'aggressive-fill-paragraph-mode))
+  (global-pangu-spacing-mode 1))
+
 #+end_src
