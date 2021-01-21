@@ -694,7 +694,8 @@
  "s-<down>" #'org-move-subtree-down
 
  :localleader
- "," #'org-ctrl-c-ctrl-c)
+ "," #'org-ctrl-c-ctrl-c
+ "e" #'org-export-dispatch)
 
 ;; I find it easier to use Apple’s Command-i, Command-b, Command-u to set italics, bold, underline. In Org:
 (add-hook 'org-mode-hook
