@@ -535,7 +535,9 @@
 
   ;; REVIEW : Change to your personal prefer
   ;; I want all of finished tasks to archive in one file --archive.org
-  (setq org-archive-location "archive.org::"))
+  (setq org-archive-location (concat org-directory "archive.org::")))
+
+
 
 #+end_src
 *** org agenda related
@@ -549,7 +551,7 @@
         '(:link t :maxlevel 6 :fileskip0 t :compact t :narrow 60 :score 0))
 
   ;; REVIEW : Change to your personal prefer
-  (setq org-agenda-files (list (concat org-directory "roam/inbox.org")))
+  (setq org-agenda-files (directory-files-recursively (concat org-directory "roam") "\\.org$"))
 
   ;; REVIEW : Change to your personal prefer
   (setq org-agenda-diary-file (concat org-directory "private/standard-diary"))
