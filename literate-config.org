@@ -532,6 +532,13 @@
      (gnuplot . t)))
 
 
+  ;; replace list symbol "-" with unicode symbol
+  (font-lock-add-keywords 'org-mode
+                          '(("^ *\\([-]\\) "
+                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "↣"))))))
+
+  ;; Somehow, this causes strange problem.
+  ;; (add-to-list 'warning-suppress-types '(yasnippet backquote-change))
 
   ;; REVIEW : Change to your personal prefer
   ;; I want all of finished tasks to archive in one file --archive.org
@@ -730,12 +737,6 @@
 (set-default-coding-systems 'utf-8)
 (setq default-buffer-file-coding-system 'utf-8)
 
-;; replace list symbol "-" with unicode symbol
-(font-lock-add-keywords 'org-mode
-                          '(("^ *\\([-]\\) "
-                             (0 (prog1 () (compose-region (match-beginning 1) (match-end 1) "↣"))))))
-
-(add-to-list 'warning-suppress-types '(yasnippet backquote-change))
 
 ;; 时间戳使用英文星期
 (setq system-time-locale "C")
