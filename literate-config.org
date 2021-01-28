@@ -108,7 +108,7 @@
 
 ;;(package! visual-fill-column)
 (package! org-page)
-;;(package! org-roam-server)
+(package! org-roam-server)
 (package! dired-narrow)
 (package! valign)
 (package! rime)
@@ -124,6 +124,9 @@
 
 #+begin_src emacs-lisp :tangle "~/.doom.d/config.el" :mkdirp yes
 ;;; $DOOMDIR/config.el -*- lexical-binding: t; -*-
+;; Review Change archives to emacs-china
+(setq package-archives '(("gnu" . "http://elpa.emacs-china.org/gnu/")
+                         ("melpa" . "http://elpa.emacs-china.org/melpa/")))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Personal Infomation ;;
@@ -773,15 +776,15 @@
 
 ** *Finally, config the packages you want*
 #+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
-;;(use-package! org-roam-server
-;;    :config
-;;    (setq org-roam-server-host "127.0.0.1"
-;;          org-roam-server-port 9090
-;;          org-roam-server-export-inline-images t
-;;          org-roam-server-authenticate nil
-;;          org-roam-server-network-label-truncate t
-;;          org-roam-server-network-label-truncate-length 60
-;;          org-roam-server-network-label-wrap-length 20))
+(use-package! org-roam-server
+   :config
+   (setq org-roam-server-host "127.0.0.1"
+         org-roam-server-port 9090
+         org-roam-server-export-inline-images t
+         org-roam-server-authenticate nil
+         org-roam-server-network-label-truncate t
+         org-roam-server-network-label-truncate-length 60
+         org-roam-server-network-label-wrap-length 20))
 
 (use-package org-page
   :config
