@@ -612,7 +612,9 @@
         ))
 (with-eval-after-load 'ox-latex
   (add-to-list 'org-latex-classes
-               '("ctexart" "\\documentclass[11pt]{ctexart}"
+               '("ctexart" "\\documentclass[11pt]{ctexart}
+\\usepackage{nopageno}
+\\usepackage{parskip}"
                  ("\\section{%s}" . "\\section*{%s}")
                  ("\\subsection{%s}" . "\\subsection*{%s}")
                  ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
@@ -842,6 +844,12 @@
   (rime-librime-root "~/.emacs.d/librime/dist")
   (rime-emacs-module-header-root "/usr/local/Cellar/emacs-mac/emacs-27.1-mac-8.0/include")
   :config
+  (setq rime-disable-predicates
+      '(rime-predicate-evil-mode-p
+        rime-predicate-after-alphabet-char-p
+        rime-predicate-current-input-punctuation-p
+        rime-predicate-current-uppercase-letter-p
+        rime-predicate-punctuation-line-begin-p))
   (setq rime-user-data-dir "~/Library/Rime"))
 
 
