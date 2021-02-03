@@ -707,6 +707,12 @@
 
  "C-s" 'swiper-isearch)
 
+(map! :leader
+      :prefix ("r" . "org-roam")
+      "f" #'org-roam-find-file
+      "s" #'org-roam-server-mode
+      "t" #'org-roam-dailies-find-today)
+
 #+end_src
 *** orgmode keybindings
 #+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
@@ -722,6 +728,7 @@
  :localleader
  "," #'org-ctrl-c-ctrl-c
  "e" #'org-export-dispatch)
+
 
 ;; I find it easier to use Apple’s Command-i, Command-b, Command-u to set italics, bold, underline. In Org:
 (add-hook 'org-mode-hook
