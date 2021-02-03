@@ -89,7 +89,7 @@
        ;;(wanderlust +gmail)
 
        :app
-       ;;calendar
+       calendar
        ;;irc               ; how neckbeards socialize
        (rss +org)        ; emacs as an RSS reader
        ;;twitter           ; twitter client https://twitter.com/vnought
@@ -680,6 +680,12 @@
                 org-download-timestamp ""
                 org-download-screenshot-file (expand-file-name "screenshot.jpg" temporary-file-directory)))
 
+#+end_src
+*** emacs-calfw
+#+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
+(use-package! calfw
+  :config
+  (setq cfw:display-calendar-holidays nil))
 #+end_src
 
 ** *Remap Keybindings*
