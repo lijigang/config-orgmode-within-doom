@@ -855,7 +855,7 @@
   :custom
   (default-input-method "rime")
   (rime-librime-root "~/.emacs.d/librime/dist")
-  (rime-emacs-module-header-root "/usr/local/Cellar/emacs-mac/emacs-27.1-mac-8.0/include")
+  (rime-emacs-module-header-root "/usr/local/opt/emacs-plus/include")
   :config
   (define-key rime-mode-map (kbd "C-i") 'rime-force-enable)
   (setq rime-disable-predicates
