@@ -79,7 +79,7 @@
        latex             ; writing papers in Emacs has never been so fun
        ;;markdown          ; writing docs for people to ignore
        (org +roam +dragndrop +gnuplot +pandoc +present)
-       ;;plantuml          ; diagrams for confusing people more
+       plantuml          ; diagrams for confusing people more
        sh                ; she sells {ba,z,fi}sh shells on the C xor
        yaml              ; JSON, but readable
 
@@ -116,6 +116,12 @@
   :recipe
   (:host github :repo "davidshepherd7/aggressive-fill-paragraph-mode"))
 (package! pangu-spacing)
+(package! nano-emacs
+  :recipe (:host github :repo "rougier/nano-emacs"))
+
+(package! writer-word-goals
+  :recipe (:host github :repo "lijigang/writer-word-goals"))
+
 #+end_src
 
 * Config of everything(config.el)
@@ -141,17 +147,30 @@
 
 (setq frame-title-format '("你要对这个世界有点意见"))
 
-(setq doom-theme 'whiteboard)
+;; (setq doom-theme 'whiteboard)
+
+(setq doom-theme nil)
+
+
+(require 'disp-table)
+(require 'nano-faces)
+(require 'nano-colors)
+(require 'nano-theme)
+(require 'nano-help)
+(require 'nano-modeline)
+;; (require 'nano-layout)
+(nano-faces)
+(nano-theme)
 
 (setq evil-snipe-override-evil-repeat-keys nil)
 
 (setq doom-font (font-spec :family "Roboto Mono" :size 20)
       doom-serif-font (font-spec :family "Roboto Mono" )
-      doom-variable-pitch-font (font-spec :family "Microsoft Yahei" :weight 'extra-bold)
-      doom-big-font (font-spec :family "Microsoft Yahei" :size 23))
+      doom-variable-pitch-font (font-spec :family "Microsoft YaHei" :weight 'extra-bold)
+      doom-big-font (font-spec :family "Microsoft YaHei" :size 23))
 
 (defun colawithsauce/set-fonts ()
-  (set-fontset-font "fontset-default" 'unicode (font-spec :family "Microsoft Yahei") nil 'prepend)
+  (set-fontset-font "fontset-default" 'unicode (font-spec :family "Microsoft YaHei") nil 'prepend)
   (set-fontset-font "fontset-default" 'symbol (font-spec :family "Apple Color Emoji") nil 'prepend))
 
 (add-hook! 'after-setting-font-hook :append 'colawithsauce/set-fonts)
@@ -527,11 +546,14 @@
   (setq org-html-head
         "<link rel='stylesheet' type='text/css' href='https://www.labri.fr/perso/nrougier/GTD/GTD.css'/>")
 
+  (add-to-list 'org-src-lang-modes '("plantuml" . plantuml))
+
   ;; active Org-babel languages
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((emacs-lisp . t)
      (shell . t)
+     (plantuml . t)
      (gnuplot . t)))
 
 
@@ -637,6 +659,12 @@
         company-global-modes '(not comint-mode erc-mode message-mode help-mode gud-mode)))
 
 #+end_src
+*** plantuml
+#+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
+(after! plantuml-mode
+  (setq plantuml-jar-path (expand-file-name "~/Documents/emacs/org/private/plantuml.jar"))
+  (setq plantuml-default-exec-mode 'jar))
+#+end_src
 
 *** ivy
 #+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
@@ -711,6 +739,7 @@
       :prefix ("r" . "org-roam")
       "f" #'org-roam-find-file
       "s" #'org-roam-server-mode
+      "i" #'org-roam-insert
       "t" #'org-roam-dailies-find-today)
 
 #+end_src
@@ -873,5 +902,9 @@
 (use-package! pangu-spacing
   :config
   (global-pangu-spacing-mode 1))
+
+(use-package! wwg
+  :config
+  (require 'wwg))
 
 #+end_src
