@@ -147,6 +147,8 @@
 
 (setq frame-title-format '("你要对这个世界有点意见"))
 
+(setq +rss-enable-sliced-images nil)
+
 ;; (setq doom-theme 'whiteboard)
 
 (setq doom-theme nil)
