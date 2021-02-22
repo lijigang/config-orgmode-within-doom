@@ -632,10 +632,22 @@
         "xelatex -interaction nonstopmode -output-directory %o %f"
         "rm -fr %b.out %b.log %b.tex auto"
         ))
+
+
 (with-eval-after-load 'ox-latex
   (add-to-list 'org-latex-classes
-               '("ctexart" "\\documentclass[11pt]{ctexart}
+               '("ctexart" "\\documentclass[11pt,titlepage]{ctexart}
 \\usepackage{nopageno}
+\\usepackage[utf8]{inputenc}
+\\usepackage{hyperref}
+\\usepackage[T1]{fontenc}
+\\usepackage{color}
+\\usepackage{graphicx}
+\\usepackage{longtable}
+\\usepackage{float}
+\\usepackage{wrapfig}
+\\usepackage{enumerate}
+\\definecolor{bg}{rgb}{0.95,0.95,0.95}
 \\usepackage{parskip}"
                  ("\\section{%s}" . "\\section*{%s}")
                  ("\\subsection{%s}" . "\\subsection*{%s}")
@@ -644,6 +656,9 @@
                  ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
   (setq org-latex-default-class "ctexart")
   (setq org-latex-compiler "xelatex"))
+
+(setq org-latex-packages-alist '("\\hypersetup{colorlinks=true,linkcolor=blue}"))
+
 #+end_src
 
 ** Doom module Realted Config
