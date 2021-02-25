@@ -164,6 +164,21 @@
 (nano-faces)
 (nano-theme)
 
+(setq display-line-numbers-type nil
+      evil-default-cursor t
+      custom-blue "#718591"
+      custom-yellow "#BDA441")
+
+; still haven't figured out what is up with point
+; related to nano. this is a stopgap measure to
+; get a decent looking cursor
+(if (daemonp)
+    (add-hook 'after-make-frame-functions
+              (lambda (frame)
+                (with-selected-frame frame
+                  (set-cursor-color custom-blue))))
+  (set-cursor-color custom-blue))
+
 (setq evil-snipe-override-evil-repeat-keys nil)
 
 (setq doom-font (font-spec :family "Roboto Mono" :size 20)
