@@ -527,6 +527,10 @@ r 为未来现金流折现率， n为企业未来存活年数"
 
   (set-face-attribute 'org-headline-done nil :strike-through t)
 
+  ;; REVIEW: Change to your personal version
+  (setenv "PATH" (concat (getenv "PATH") ":/usr/local/texlive/2019/bin/x86_64-darwin/"))
+  (setq exec-path (append exec-path '("/usr/local/texlive/2019/bin/x86_64-darwin/")))
+
   ;; 打开 org-indent mode
   (setq org-startup-indented t
         org-confirm-babel-evaluate nil
