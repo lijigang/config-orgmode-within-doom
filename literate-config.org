@@ -122,6 +122,7 @@
 (package! writer-word-goals
   :recipe (:host github :repo "lijigang/writer-word-goals"))
 
+(package! go-translate)
 #+end_src
 
 * Config of everything(config.el)
@@ -954,4 +955,9 @@ r 为未来现金流折现率， n为企业未来存活年数"
   :config
   (require 'wwg))
 
+(use-package go-translate
+  :config
+  (setq go-translate-base-url "https://translate.google.cn")
+  (setq go-translate-local-language "zh-CN")
+  (setq go-translate-token-current (cons 430675 2721866130)))
 #+end_src
