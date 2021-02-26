@@ -123,6 +123,8 @@
   :recipe (:host github :repo "lijigang/writer-word-goals"))
 
 (package! go-translate)
+(package! imenu-list)
+
 #+end_src
 
 * Config of everything(config.el)
@@ -196,6 +198,7 @@
 (add-hook! 'org-mode-hook #'mixed-pitch-mode)
 
 (setq mixed-pitch-variable-pitch-cursor nil)
+
 #+end_src
 ** Personal functions
 
@@ -521,6 +524,8 @@ r 为未来现金流折现率， n为企业未来存活年数"
   ;; REVIEW : Change to your personal prefer
   (setq org-todo-keywords
         '((sequence "TODO" "HACK" "|" "DONE")))
+
+  (set-face-attribute 'org-headline-done nil :strike-through t)
 
   ;; 打开 org-indent mode
   (setq org-startup-indented t
