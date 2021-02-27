@@ -675,21 +675,58 @@ r 为未来现金流折现率， n为企业未来存活年数"
         "rm -fr %b.out %b.log %b.tex auto"
         ))
 
-
 (with-eval-after-load 'ox-latex
   (add-to-list 'org-latex-classes
                '("ctexart" "\\documentclass[11pt,titlepage]{ctexart}
-\\usepackage{nopageno}
+
+% Document title
+\\usepackage{titling}
+
+% Page Margins: important
+% https://ctan.math.illinois.edu/macros/latex/contrib/geometry/geometry.pdf
+\\usepackage[scale=0.8,centering]{geometry}
+
+% Page head and foot
+% lhead/chead/rhead
+% lfoot/cfoot/rfoot
+\\usepackage{fancyhdr}
+\\pagestyle{fancy}
+\\rfoot{\\title}
+\\renewcommand\\headrulewidth{0.6pt}
+\\renewcommand\\footrulewidth{0.6pt}
+
+
+% Format of section and subsection headers
+% [rm sf tt bf up it sl sc]
+% Select the corresponding family/series/shape. Default is bf.
+\\usepackage{titlesec}
+
+% 使用UTF-8编码输入文字
 \\usepackage[utf8]{inputenc}
-\\usepackage{hyperref}
 \\usepackage[T1]{fontenc}
-\\usepackage{color}
+
+% Hyperlinks and bookmarks
+\\usepackage{hyperref}
+\\hypersetup{colorlinks=true,linkcolor=blue}
+
+% xcolor is more powerful than color
+% \\color{red!70}  %70 percent red color
+% \\textcolor{red}
+% \\colorbox{gray}
+\\usepackage[rgb]{xcolor}
+
+% Include graphics
 \\usepackage{graphicx}
+
 \\usepackage{longtable}
 \\usepackage{float}
 \\usepackage{wrapfig}
+
+% List items
 \\usepackage{enumerate}
-\\definecolor{bg}{rgb}{0.95,0.95,0.95}
+%% \\usepackage{enumitem}
+
+% Line spread
 \\usepackage{parskip}"
                  ("\\section{%s}" . "\\section*{%s}")
                  ("\\subsection{%s}" . "\\subsection*{%s}")
@@ -698,8 +735,6 @@ r 为未来现金流折现率， n为企业未来存活年数"
                  ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
   (setq org-latex-default-class "ctexart")
   (setq org-latex-compiler "xelatex"))
-
-(setq org-latex-packages-alist '("\\hypersetup{colorlinks=true,linkcolor=blue}"))
 
 #+end_src
 
