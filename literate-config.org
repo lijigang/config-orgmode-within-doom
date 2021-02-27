@@ -68,7 +68,7 @@
        ;;gist              ; interacting with github gists
        lookup              ; navigate your code and its documentation
        magit             ; a git porcelain for Emacs
-       ;;pdf               ; pdf enhancements
+       pdf               ; pdf enhancements
        ;;rgb               ; creating color strings
 
        :os
