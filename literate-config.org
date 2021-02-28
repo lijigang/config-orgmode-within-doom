@@ -159,6 +159,9 @@
 
 (setq frame-title-format '("你要对这个世界有点意见"))
 
+;; Stretch cursor to the glyph width (Tab width cursor)
+(setq-default x-stretch-cursor t)
+
 (setq +rss-enable-sliced-images nil)
 
 ;; (setq doom-theme 'whiteboard)
@@ -181,9 +184,6 @@
       custom-blue "#718591"
       custom-yellow "#BDA441")
 
-; still haven't figured out what is up with point
-; related to nano. this is a stopgap measure to
-; get a decent looking cursor
 (if (daemonp)
     (add-hook 'after-make-frame-functions
               (lambda (frame)
@@ -207,7 +207,6 @@
 (add-hook! 'org-mode-hook #'mixed-pitch-mode)
 
 (setq mixed-pitch-variable-pitch-cursor nil)
-
 #+end_src
 ** Personal functions
 
