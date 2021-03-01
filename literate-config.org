@@ -983,8 +983,8 @@ r 为未来现金流折现率， n为企业未来存活年数"
 (use-package! rime
   :custom
   (default-input-method "rime")
-  (rime-librime-root "~/.emacs.d/librime/dist")
-  (rime-emacs-module-header-root "/usr/local/opt/emacs-plus/include")
+  (rime-librime-root "~/Documents/emacs/depend/librime/dist")
+  (rime-emacs-module-header-root "/usr/local/opt/emacs-mac/include")
   :config
   (define-key rime-mode-map (kbd "C-i") 'rime-force-enable)
   (setq rime-disable-predicates
