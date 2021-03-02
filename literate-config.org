@@ -138,6 +138,9 @@
 (package! nov)
 
 (package! org-super-agenda)
+
+(package! org-appear
+  :recipe (:host github :repo "awth13/org-appear"))
 #+end_src
 
 * Config of everything(config.el)
@@ -199,14 +202,8 @@
 
 (setq doom-font (font-spec :family "Roboto Mono" :size 20)
       doom-serif-font (font-spec :family "Roboto Mono" )
-      doom-variable-pitch-font (font-spec :family "Microsoft YaHei" :weight 'extra-bold)
-      doom-big-font (font-spec :family "Microsoft YaHei" :size 23))
-
-(defun colawithsauce/set-fonts ()
-  (set-fontset-font "fontset-default" 'unicode (font-spec :family "Microsoft YaHei") nil 'prepend)
-  (set-fontset-font "fontset-default" 'symbol (font-spec :family "Apple Color Emoji") nil 'prepend))
-
-(add-hook! 'after-setting-font-hook :append 'colawithsauce/set-fonts)
+      doom-variable-pitch-font (font-spec :family "PingFang SC" :weight 'extra-bold)
+      doom-big-font (font-spec :family "PingFang SC" :size 23))
 
 (add-hook! 'org-mode-hook #'mixed-pitch-mode)
 
@@ -449,22 +446,37 @@ r 为未来现金流折现率， n为企业未来存活年数"
 #+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
 
 ;; Change org headline size
-(let* ((variable-tuple (cond ((x-list-fonts "Source Code Pro") '(:font "Source Code Pro"))
-                             ((x-list-fonts "Roboto Mono") '(:font "Roboto Mono"))
-                             (nil (warn "Cannot find a Sans Serif Font.  Install Source Code Pro."))))
-       (base-font-color     (face-foreground 'default nil 'default))
-       (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
 
-  (custom-theme-set-faces 'user
-                              `(org-level-8 ((t (,@headline ,@variable-tuple))))
-                              `(org-level-7 ((t (,@headline ,@variable-tuple))))
-                              `(org-level-6 ((t (,@headline ,@variable-tuple))))
-                              `(org-level-5 ((t (,@headline ,@variable-tuple))))
-                              `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.1))))
-                              `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.25))))
-                              `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.4))))
-                              `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.6))))
-                              `(org-document-title ((t (,@headline ,@variable-tuple :height 1.75 :underline nil))))))
+(custom-set-faces!
+  '(outline-1 :weight extra-bold :height 1.25)
+  '(outline-2 :weight bold :height 1.15)
+  '(outline-3 :weight bold :height 1.12)
+  '(outline-4 :weight semi-bold :height 1.09)
+  '(outline-5 :weight semi-bold :height 1.06)
+  '(outline-6 :weight semi-bold :height 1.03)
+  '(outline-8 :weight semi-bold)
+  '(outline-9 :weight semi-bold))
+
+(custom-set-faces!
+  '(org-document-title :height 1.2))
+
+
+;; (let* ((variable-tuple (cond ((x-list-fonts "Source Code Pro") '(:font "Source Code Pro"))
+;;                              ((x-list-fonts "Roboto Mono") '(:font "Roboto Mono"))
+;;                              (nil (warn "Cannot find a Sans Serif Font.  Install Source Code Pro."))))
+;;        (base-font-color     (face-foreground 'default nil 'default))
+;;        (headline           `(:inherit default :weight bold :foreground ,base-font-color)))
+
+;;   (custom-theme-set-faces 'user
+;;                               `(org-level-8 ((t (,@headline ,@variable-tuple))))
+;;                               `(org-level-7 ((t (,@headline ,@variable-tuple))))
+;;                               `(org-level-6 ((t (,@headline ,@variable-tuple))))
+;;                               `(org-level-5 ((t (,@headline ,@variable-tuple))))
+;;                               `(org-level-4 ((t (,@headline ,@variable-tuple :height 1.1))))
+;;                               `(org-level-3 ((t (,@headline ,@variable-tuple :height 1.25))))
+;;                               `(org-level-2 ((t (,@headline ,@variable-tuple :height 1.4))))
+;;                               `(org-level-1 ((t (,@headline ,@variable-tuple :height 1.6))))
+;;                               `(org-document-title ((t (,@headline ,@variable-tuple :height 1.75 :underline nil))))))
   #+end_src
 *** Change checkbox style
 #+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
@@ -556,7 +568,7 @@ r 为未来现金流折现率， n为企业未来存活年数"
         org-hide-emphasis-markers t
 
         ;; REVIEW : Change to your personal prefer
-        org-ellipsis  "⠳"
+        org-ellipsis  " ▾ "
 
         org-tags-column -80
         org-image-actual-width nil
@@ -625,7 +637,7 @@ r 为未来现金流折现率， n为企业未来存活年数"
 
 (after! org
   (map! :map org-mode-map
-        :localleader
+        :leader
         :desc "View exported file" "v" #'org-view-output-file)
 
   (defun org-view-output-file (&optional org-file-path)
@@ -1191,5 +1203,13 @@ r 为未来现金流折现率， n为企业未来存活年数"
                            :todo "WAITING"
                            :order 20)
                           (:discard (:tag ("Chore" "Routine" "Daily")))))))))))
+
+
+(use-package! org-appear
+  :hook (org-mode . org-appear-mode)
+  :config
+  (setq org-appear-autoemphasis t
+        org-appear-autosubmarkers t
+        org-appear-autolinks nil))
 
 #+end_src
