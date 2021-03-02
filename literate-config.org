@@ -141,6 +141,8 @@
 
 (package! org-appear
   :recipe (:host github :repo "awth13/org-appear"))
+
+(package! org-special-block-extras)
 #+end_src
 
 * Config of everything(config.el)
@@ -772,6 +774,10 @@ r 为未来现金流折现率， n为企业未来存活年数"
 \\usepackage{float}
 \\usepackage{wrapfig}
 
+% For org-special-block-extras package
+\\usepackage{tcolorbox}
+\\usepackage{multicol}
+
 % List items
 \\usepackage{enumerate}
 %% \\usepackage{enumitem}
@@ -785,7 +791,6 @@ r 为未来现金流折现率， n为企业未来存活年数"
                  ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
   (setq org-latex-default-class "ctexart")
   (setq org-latex-compiler "xelatex"))
-
 #+end_src
 
 ** Doom module Realted Config
@@ -963,14 +968,14 @@ r 为未来现金流折现率， n为企业未来存活年数"
 ** *Finally, config the packages you want*
 #+begin_src emacs-lisp :tangle "~/.doom.d/config.el"
 (use-package! org-roam-server
-   :config
-   (setq org-roam-server-host "127.0.0.1"
-         org-roam-server-port 9090
-         org-roam-server-export-inline-images t
-         org-roam-server-authenticate nil
-         org-roam-server-network-label-truncate t
-         org-roam-server-network-label-truncate-length 60
-         org-roam-server-network-label-wrap-length 20))
+  :config
+  (setq org-roam-server-host "127.0.0.1"
+        org-roam-server-port 9090
+        org-roam-server-export-inline-images t
+        org-roam-server-authenticate nil
+        org-roam-server-network-label-truncate t
+        org-roam-server-network-label-truncate-length 60
+        org-roam-server-network-label-wrap-length 20))
 
 (use-package org-page
   :config
@@ -985,34 +990,34 @@ r 为未来现金流折现率， n为企业未来存活年数"
     (setq op/highlight-render 'js)
     (setq op/category-ignore-list '("themes" "assets" "images"))
     (setq op/category-config-alist
-    '(("blog"
-    :show-meta t
-    :show-comment t
-    :uri-generator op/generate-uri
-    :uri-template "/blog/%y/%m/%d/%t/"
-    :sort-by :date     ;; how to sort the posts
-    :category-index nil) ;; generate category index or not
-    ("index"
-    :show-meta nil
-    :show-comment nil
-    :uri-generator op/generate-uri
-    :uri-template "/"
-    :sort-by :date
-    :category-index nil)
-    ("about"
-    :show-meta nil
-    :show-comment nil
-    :uri-generator op/generate-uri
-    :uri-template "/about/"
-    :sort-by :date
-    :category-index nil)))))
+          '(("blog"
+             :show-meta t
+             :show-comment t
+             :uri-generator op/generate-uri
+             :uri-template "/blog/%y/%m/%d/%t/"
+             :sort-by :date     ;; how to sort the posts
+             :category-index nil) ;; generate category index or not
+            ("index"
+             :show-meta nil
+             :show-comment nil
+             :uri-generator op/generate-uri
+             :uri-template "/"
+             :sort-by :date
+             :category-index nil)
+            ("about"
+             :show-meta nil
+             :show-comment nil
+             :uri-generator op/generate-uri
+             :uri-template "/about/"
+             :sort-by :date
+             :category-index nil)))))
 
 
 (use-package! dired-narrow
-              :commands (dired-narrow-fuzzy)
-              :init
-              (map! :map dired-mode-map
-                    :desc "narrow" "/" #'dired-narrow-fuzzy))
+  :commands (dired-narrow-fuzzy)
+  :init
+  (map! :map dired-mode-map
+        :desc "narrow" "/" #'dired-narrow-fuzzy))
 
 ;; Directly edit permisison bits!
 (setq wdired-allow-to-change-permissions t)
@@ -1030,11 +1035,11 @@ r 为未来现金流折现率， n为企业未来存活年数"
   :config
   (define-key rime-mode-map (kbd "C-i") 'rime-force-enable)
   (setq rime-disable-predicates
-      '(rime-predicate-evil-mode-p
-        rime-predicate-after-alphabet-char-p
-        rime-predicate-current-input-punctuation-p
-        rime-predicate-current-uppercase-letter-p
-        rime-predicate-punctuation-line-begin-p))
+        '(rime-predicate-evil-mode-p
+          rime-predicate-after-alphabet-char-p
+          rime-predicate-current-input-punctuation-p
+          rime-predicate-current-uppercase-letter-p
+          rime-predicate-punctuation-line-begin-p))
   (setq rime-user-data-dir "~/Library/Rime"))
 
 
@@ -1212,4 +1217,11 @@ r 为未来现金流折现率， n为企业未来存活年数"
         org-appear-autosubmarkers t
         org-appear-autolinks nil))
 
+(use-package! org-special-block-extras
+  :hook (org-mode . org-special-block-extras-mode)
+  :config
+  ;; Use short names like ‘defblock’ instead of the fully qualified name
+  ;; ‘org-special-block-extras--defblock’
+  (org-special-block-extras-short-names)
+  (setq org-export-allow-bind-keywords t))
 #+end_src
