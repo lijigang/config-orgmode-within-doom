@@ -736,7 +736,17 @@ r 为未来现金流折现率， n为企业未来存活年数"
 
 % Page Margins: important
 % https://ctan.math.illinois.edu/macros/latex/contrib/geometry/geometry.pdf
-\\usepackage[scale=0.8,centering]{geometry}
+% \\usepackage[scale=0.8,centering]{geometry}
+\\usepackage{geometry}
+\\geometry{
+    a4paper,% 210 * 297mm
+    nomarginpar,% 即\marginparwidth=0pt and \marginparsep=0pt
+    hcentering,% 将hmarginratio设为1:1，即left=right
+    left=28mm,% 注意left=right
+    top=37.00mm,% Word 模板页眉顶端距离20mm
+    width=156mm,
+    height=225mm,
+    }
 
 % Page head and foot
 % lhead/chead/rhead
